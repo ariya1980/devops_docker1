@@ -11,6 +11,8 @@ pipeline {
           steps {
               sh "docker --version"
               sh "sudo usermod -a -G root jenkins"
+              sh "sudo chmod 664 /var/run/docker.sock"
+              sh "sudo service jenkins restart"
               sh "docker build -t ${imageName} ."
             withCredentials(
                 [usernamePassword(credentialsId: 'docker_hub', 
