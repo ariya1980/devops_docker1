@@ -24,7 +24,15 @@ pipeline {
        stage('Deploy') { 
           agent {label 'mgr1'}
           steps {
-           sh "echo h"
+              script {
+                  try {
+                    sh "docker service update --image ${env.imageName} my_web_ex"
+                    sh "echo update service my_web_ex"
+                  } catch (e){
+                    sh "docker service create --name my_web_ex -p 3030:3000 ${env.imageName}"
+                    sh "echo create service my_web_ex"
+                  }
+              }
           }
        }
     }
